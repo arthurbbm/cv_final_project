@@ -37,7 +37,7 @@ data/
 1. **Clone the repo**
 
    ```bash
-   git clone <your‑repo‑url> cv_final_project
+   git clone https://github.com/arthurbbm/cv_final_project cv_final_project
    cd cv_final_project
    ```
 
@@ -61,14 +61,15 @@ data/
 All configurable paths go into `config.yml`.  At minimum, set:
 
 ```yaml
-pybullet_dataset: /absolute/path/to/data/input
+pybullet_dataset: /absolute/path/to/data
+segmentation_dataset: /path/to/segmentation_dataset
 ```
 
 * **`pybullet_dataset`**
-  Root of your data directory.
+  Root of your data directory for PyBullet jobs.
 
-  * Input soil images in `[pybullet_dataset]/input/soil/`
-  * Input plant meshes in `[pybullet_dataset]/input/plant/`
+  * Input soil images in `…/data/input/soil/`
+  * Input plant meshes in `…/data/input/plant/`
   * After running PyBullet scripts, outputs will be written to:
 
     ```
@@ -76,6 +77,15 @@ pybullet_dataset: /absolute/path/to/data/input
     [pybullet_dataset]/output/masks
     ```
   * **Important:** after each run of `generate_train_dataset.py` or `generate_test_dataset.py`, **rename** the `output/` folder (e.g. `output_train/`, `output_test/`) to prevent overwriting/mixture.
+
+* **`segmentation_dataset`**
+  Root of your segmentation dataset.  It should contain two subdirectories:
+
+  ```
+  /path/to/segmentation_dataset/
+  ├── train_sim/           # ground-truth images/masks
+  └── inference_train_sim/ # predicted masks
+  ```
 
 ---
 
@@ -136,13 +146,16 @@ python train.py \
   --outdir /path/to/save/model \
   --checkpoint_freq 5 \
   --lr 1e-4 \
-  --num_labels 5 \
+  --num_labels 2 \
   [--device cuda]
 ```
 
-* `--num_labels`: including background
-* `--checkpoint_freq`: save model every *n* epochs
-* `--device`: `cuda` or `cpu`
+* **Train script**: `train.py` is the correct entry point.
+* **File naming requirement**: The script pairs images and masks by sorted order—make sure each RGB image and its corresponding mask share the same filename (aside from extension) so that after sorting they align correctly.
+* **Output files** (in `--outdir`):
+
+  * `checkpoint.pth` (every `checkpoint_freq` epochs)
+  * `segmentation_model.pth` (final `state_dict`)
 
 ---
 
@@ -154,7 +167,7 @@ Once you have a trained model (`.pth`), you can predict on new images:
 cd segmentation
 python inference.py \
   --model_path /path/to/segmentation_model.pth \
-  --num_labels 5 \
+  --num_labels 2 \
   --test_dir /path/to/test/images \
   --output_dir /path/to/save/predicted/masks \
   [--device cuda]
@@ -166,15 +179,42 @@ Predicted masks will be saved as PNGs in `output_dir`.
 
 ## 📝 Metrics & Visualization
 
-* **metrics.py** — compute accuracy, IoU, precision, recall, etc.
-* **visualization.py** — overlay masks on RGB for qualitative inspection.
+This project includes scripts for evaluating and visualizing model predictions.
 
----
+### 1. Metrics (`metrics.py`)
 
-## 💬 Support & Contributions
+* **Purpose:** Compute image-wise and overall segmentation metrics (accuracy, precision, recall, F1-score, IoU).
+* **Configuration:** Ensure `config.yml` contains:
 
-Feel free to open issues or pull requests for bug fixes, enhancements, or documentation improvements.
+  ```yaml
+  segmentation_dataset: /path/to/segmentation_dataset
+  ```
 
----
+  with structure:
 
-**Happy segmenting!**
+  ```
+  segmentation_dataset/
+  ├── train_sim/             # ground-truth images and masks
+  └── inference_train_sim/   # predicted masks (same filenames)
+  ```
+* **Usage:**
+
+  ```bash
+  cd segmentation
+  python metrics.py
+  ```
+* **Outputs:**
+
+  * `metrics_imagewise.csv` – per-image metrics table
+  * `metrics_overall.csv`   – aggregated metrics summary
+
+### 2. Visualization (`visualization.py`)
+
+* **Purpose:** Overlay predicted masks on original RGB images and save blended figures for qualitative inspection.
+* **Configuration:** Uses the same `segmentation_dataset` path from above.
+* **Usage:**
+
+  ```bash
+  cd segmentation
+  python visualization.py
+  ```

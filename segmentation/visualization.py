@@ -84,6 +84,5 @@ if __name__ == "__main__":
 
     image_dir = os.path.join(dataset_root, 'train_sim')
     mask_dir = os.path.join(dataset_root, 'inference_train_sim')
-    image_dir = "/Users/arthur/Documents/ComputerVision/assignments/DT-MARS-CycleGAN/dataset/segmentation/test_sim"
-    mask_dir = "/Users/arthur/Downloads/inference_test_sim_styled"
+
     visualize_predictions(image_dir, mask_dir, num_to_show=20, alpha=0.6)

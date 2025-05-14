@@ -110,17 +110,8 @@ if __name__ == "__main__":
     dataset_root = os.path.expanduser(config["segmentation_dataset"])
 
     # set directories
-    # gt_dir = os.path.join(dataset_root, 'train_sim')
-    # pred_dir = os.path.join(dataset_root, 'inference_train_sim')
-    gt_dir = "/Users/arthur/Documents/ComputerVision/assignments/DT-MARS-CycleGAN/dataset/pybullet/output/masks"
-    pred_dir = "/Users/arthur/Documents/ComputerVision/assignments/DT-MARS-CycleGAN/dataset/segmentation/inference_train_sim"
-    # gt_dir = "/Users/arthur/Documents/ComputerVision/assignments/DT-MARS-CycleGAN/dataset/segmentation/test_real_display"
-    # pred_dir = "/Users/arthur/Documents/ComputerVision/assignments/DT-MARS-CycleGAN/dataset/segmentation/real_inference_display"
-    gt_dir = "/Users/arthur/Documents/ComputerVision/assignments/DT-MARS-CycleGAN/dataset/pybullet/output_like_original_with_mask/masks"
-    # pred_dir = "/Users/arthur/Documents/ComputerVision/assignments/DT-MARS-CycleGAN/dataset/segmentation/inference_sim"
-    # gt_dir = ""
-    pred_dir = "/Users/arthur/Downloads/inference_test_sim_styled"
-    out_dir = os.path.join(dataset_root, 'segmentation_metrics_test_sim_styled')
+    gt_dir = os.path.join(dataset_root, 'train_sim')
+    pred_dir = os.path.join(dataset_root, 'inference_train_sim')
 
     pairs = get_image_mask_pairs(gt_dir, pred_dir)
     compute_metrics(pairs, out_dir)
