@@ -37,7 +37,7 @@ data/
 1. **Clone the repo**
 
    ```bash
-   git clone https://github.com/arthurbbm/cv_final_project cv_final_project
+   git clone https://github.com/arthurbbm/cv_final_project
    cd cv_final_project
    ```
 
