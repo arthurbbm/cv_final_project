@@ -1,6 +1,4 @@
 {
-  "pybullet_dataset": "/Users/arthur/Documents/ComputerVision/assignments/DT-MARS-CycleGAN/dataset/pybullet",
-  "style_transfer_dataset": "/Users/arthur/Documents/ComputerVision/assignments/DT-MARS-CycleGAN/dataset/style_transfer",
-  "segmentation_dataset": "/Users/arthur/Documents/ComputerVision/assignments/DT-MARS-CycleGAN/dataset/segmentation",
-  "style_transfer_model": "/Users/arthur/Documents/ComputerVision/assignments/DT-MARS-CycleGAN/weight/pure_sim.pt"
+  "pybullet_dataset": "",
+  "segmentation_dataset": "",
 }
